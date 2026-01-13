@@ -18,6 +18,7 @@ def main():
     # Gather user prompt
     parser = argparse.ArgumentParser(description="AiChatBot")
     parser.add_argument("user_prompt", type=str, help="User prompt")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
@@ -31,18 +32,17 @@ def main():
         contents=messages,
     )
 
-    # Print response metadata
-    if response.usage_metadata:
+    if not response.usage_metadata:
+        raise RuntimeError("usage_metadata not found")
+
+    if args.verbose:
         print(
             f"""
+User prompt: {args.user_prompt}
 Prompt tokens: {response.usage_metadata.prompt_token_count}
 Response tokens: {response.usage_metadata.candidates_token_count}
             """
         )
-    else:
-        raise RuntimeError("usage_metadata not found")
-
-    # Print gemini's response
     print(response.text)
 
 
