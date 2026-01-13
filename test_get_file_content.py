@@ -9,8 +9,6 @@ test_cases = [
     ("calculator", "pkg/does_not_exits.py"),
 ]
 
-output = get_file_content("calculator", "lorem.txt")
-
 
 for case in test_cases:
     result = get_file_content(*case)
