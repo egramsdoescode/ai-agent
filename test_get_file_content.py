@@ -13,7 +13,7 @@ output = get_file_content("calculator", "lorem.txt")
 
 
 for case in test_cases:
-    result = get_file_content(case[0], case[1])
+    result = get_file_content(*case)
     content_length = len(result)
     trunc_message = result[-TRUNC_MSG_LEN:] if content_length > MAX_CHARS else ""
     print(

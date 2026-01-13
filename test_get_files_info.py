@@ -11,5 +11,5 @@ for case in test_cases:
     print(
         f""" 
 Result for {"current" if case[1] == "." else f"'{case[1]}'"} directory:
-{get_files_info(case[0], case[1])}"""
+{get_files_info(*case)}"""
     )
