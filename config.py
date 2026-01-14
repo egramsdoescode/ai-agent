@@ -1,4 +1,2 @@
 MAX_CHARS = 10_000
 TRUNC_MSG_LEN = 51
-
-PY_EXT = ".py"
