@@ -1,7 +1,8 @@
 import os
+import sys
 import argparse
 
-from call_function import available_functions
+from call_function import available_functions, call_function
 from prompts import system_prompt
 from dotenv import load_dotenv
 from google import genai
@@ -28,31 +29,58 @@ def main():
     # Generate client to comminicate with gemini
     client = genai.Client(api_key=api_key)
 
-    # Send and receive response from gemini
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=messages,
-        config=types.GenerateContentConfig(
-            tools=[available_functions], system_instruction=system_prompt
-        ),
-    )
+    for _ in range(20):
+        # Send and receive response from gemini
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=messages,
+            config=types.GenerateContentConfig(
+                tools=[available_functions], system_instruction=system_prompt
+            ),
+        )
 
-    if not response.usage_metadata:
-        raise RuntimeError("usage_metadata not found")
+        if response.candidates:
+            for candidate in response.candidates:
+                messages.append(candidate.content)
 
-    if args.verbose:
-        print(
-            f"""
+        if not response.usage_metadata:
+            raise RuntimeError("usage_metadata not found")
+
+        if args.verbose:
+            print(
+                f"""
 User prompt: {args.user_prompt}
 Prompt tokens: {response.usage_metadata.prompt_token_count}
 Response tokens: {response.usage_metadata.candidates_token_count}
-            """
-        )
+                """
+            )
 
-    if response.function_calls:
-        for call in response.function_calls:
-            print(f"Calling function: {call.name}({call.args})")
-    print(response.text)
+        if response.function_calls:
+            function_results = []
+            for function_call in response.function_calls:
+                function_call_result = call_function(function_call, args.verbose)
+
+                if not function_call_result.parts:
+                    raise Exception("Empty parts list")
+                if not function_call_result.parts[0].function_response:
+                    raise Exception("No function response")
+                if not function_call_result.parts[0].function_response.response:
+                    raise Exception("No result")
+
+                function_results.append(function_call_result.parts[0])
+
+                if args.verbose:
+                    print(
+                        f"-> {function_call_result.parts[0].function_response.response}"
+                    )
+
+            messages.append(types.Content(role="user", parts=function_results))
+        else:
+            print(response.text)
+            return
+
+    print("Error: Agent could not produce reponse in 20 attempts")
+    sys.exit(1)
 
 
 if __name__ == "__main__":
