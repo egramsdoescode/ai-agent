@@ -120,13 +120,5 @@ This project intentionally avoids:
 * Python only execution environment
 * Behavior depends heavily on prompt quality
 
-This repository exists for learning and exploration only.
+This repository exists for AI learning and exploration only.
 
----
-
-## Why This Project Exists
-
-Most AI coding agents optimize for output quality while ignoring accountability. This project explores what an AI agent looks like when every action is constrained, logged, and reviewable.
-
-It is intentionally small, explicit, and opinionated.
----
