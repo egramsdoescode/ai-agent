@@ -11,7 +11,7 @@ This project is not production ready and is not intended to be used outside of e
 ## Demo
 
 AI Agent Demo
-[https://github.com/user-attachments/assets/2636f242-1a33-4904-8c62-4d3df3053716](https://github.com/user-attachments/assets/2636f242-1a33-4904-8c62-4d3df3053716)
+[AI Agent Demo](https://github.com/user-attachments/assets/2636f242-1a33-4904-8c62-4d3df3053716)
 
 ---
 
