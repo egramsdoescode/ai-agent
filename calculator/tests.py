@@ -32,6 +32,14 @@ class TestCalculator(unittest.TestCase):
         result = self.calculator.evaluate("2 * 3 - 8 / 2 + 5")
         self.assertEqual(result, 7)
 
+    def test_parentheses(self):
+        result = self.calculator.evaluate("(3 + 5) * 2")
+        self.assertEqual(result, 16)
+        result = self.calculator.evaluate("10 / (2 + 3)")
+        self.assertEqual(result, 2)
+        result = self.calculator.evaluate("((1 + 2) * 3) / 3")
+        self.assertEqual(result, 3)
+
     def test_empty_expression(self):
         result = self.calculator.evaluate("")
         self.assertIsNone(result)
@@ -43,6 +51,12 @@ class TestCalculator(unittest.TestCase):
     def test_not_enough_operands(self):
         with self.assertRaises(ValueError):
             self.calculator.evaluate("+ 3")
+
+    def test_mismatched_parentheses(self):
+        with self.assertRaises(ValueError):
+            self.calculator.evaluate("(3 + 5")
+        with self.assertRaises(ValueError):
+            self.calculator.evaluate("3 + 5)")
 
 
 if __name__ == "__main__":

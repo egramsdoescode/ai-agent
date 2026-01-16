@@ -1,5 +1,7 @@
 # calculator/pkg/calculator.py
 
+import re
+
 
 class Calculator:
     def __init__(self):
@@ -14,12 +16,16 @@ class Calculator:
             "-": 2,
             "*": 3,
             "/": 3,
+            "(": 1,  # Lower precedence for '(' on stack
         }
 
     def evaluate(self, expression):
         if not expression or expression.isspace():
             return None
-        tokens = expression.strip().split()
+        # Tokenize the expression: split by operators, parentheses, and spaces
+        tokens = re.findall(r'(\d+\.?\d*|\+|\-|\*|\/|\(|\))', expression)
+        # Filter out empty strings that might result from re.findall with multiple delimiters
+        tokens = [token.strip() for token in tokens if token.strip()]
         return self._evaluate_infix(tokens)
 
     def _evaluate_infix(self, tokens):
@@ -27,11 +33,19 @@ class Calculator:
         operators = []
 
         for token in tokens:
-            if token in self.operators:
+            if token == '(':
+                operators.append(token)
+            elif token == ')':
+                while operators and operators[-1] != '(':
+                    self._apply_operator(operators, values)
+                if not operators or operators[-1] != '(':
+                    raise ValueError("Mismatched parentheses")
+                operators.pop()  # Pop '('
+            elif token in self.operators:
                 while (
                     operators
                     and operators[-1] in self.operators
-                    and self.precedence[operators[-1]] >= self.precedence[token]
+                    and self.precedence.get(operators[-1], 0) >= self.precedence.get(token, 0)
                 ):
                     self._apply_operator(operators, values)
                 operators.append(token)
@@ -42,6 +56,8 @@ class Calculator:
                     raise ValueError(f"invalid token: {token}")
 
         while operators:
+            if operators[-1] == '(':
+                raise ValueError("Mismatched parentheses")
             self._apply_operator(operators, values)
 
         if len(values) != 1:
