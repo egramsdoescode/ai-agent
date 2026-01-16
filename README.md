@@ -45,14 +45,11 @@ This makes the agent suitable for experimenting with autonomous coding behavior 
 
 ### Core Components
 
-main.py
-Entry point for the CLI. Responsible for argument parsing, initializing the Gemini client, orchestrating the agent loop, and dispatching tool calls.
+```main.py```: Entry point for the CLI. Responsible for argument parsing, initializing the Gemini client, orchestrating the agent loop, and dispatching tool calls.
 
-prompts.py
-Defines the system and developer prompts that shape agent behavior, including tool usage rules, file access constraints, and expectations around explanation and reasoning.
+```prompts.py```: Defines the system and developer prompts that shape agent behavior, including tool usage rules, file access constraints, and expectations around explanation and reasoning.
 
-call_function.py
-Implements the tool execution layer. This file maps Gemini function calls to concrete Python functions and ensures arguments are validated and access remains limited to the project root.
+```call_function.py```: Implements the tool execution layer. This file maps Gemini function calls to concrete Python functions and ensures arguments are validated and access remains limited to the project root.
 
 Tool implementations:
 
@@ -63,8 +60,7 @@ Tool implementations:
 
 Each tool performs a single explicit action and enforces basic safety checks such as path validation and size limits.
 
-config.py
-Holds centralized configuration values such as maximum file read size and output truncation limits.
+```config.py```: Holds centralized configuration values such as maximum file read size and output truncation limits.
 
 ---
 
