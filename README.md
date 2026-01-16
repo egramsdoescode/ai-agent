@@ -68,7 +68,6 @@ Each tool performs a single explicit action and enforces basic safety checks suc
 The calculator directory contains a small example application that exists solely to demonstrate the agent’s ability to inspect, modify, and extend real code.
 
 This directory is intentionally simple and serves as a sandbox target for the agent. Changes made by the agent to files in calculator are recorded in ai-change-log.json, making it easy to correlate agent actions with concrete code modifications.
----
 
 ## AI Change Log
 
